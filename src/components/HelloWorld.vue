@@ -1,39 +1,64 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <span v-fonn></span>
+    <input type="text" v-debounce='inputEvent' ref="inp" value="111">
+    <span>{{msg}}</span>
+    <div @mousemove="mouseEvent" id="div1"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data() {
+    return {
+      msg: '',
+      fn: this.throttle(function(){
+        console.log(arguments[0]);
+      },2000)
+    }   
+  },
+  directives: {
+    debounce:{
+      bind(){
+        console.log('bind');
+      },
+      inserted(el,binding){
+        let timer = null
+        el.addEventListener('keyup',()=>{
+          if(timer){
+             clearTimeout(timer)
+          }           
+            timer = setTimeout(()=>{
+              binding.value()
+            },500)         
+        })
+      },
+    }
+  },
+  methods: {
+    inputEvent(){
+      console.log(this.$refs.inp.value);
+      this.msg=this.$refs.inp.value
+    },
+    mouseEvent(){
+      let nn = 11
+      let mm = 22
+      this.fn(nn,mm)
+    },
+    throttle(fn,wait){
+      let timer = null
+
+      return function(...arg){
+        if(!timer){
+          timer = setTimeout(()=>{
+            timer = null
+            fn.apply(this,arg)
+          },wait)
+      }
+      }
+
+    }
   }
 }
 </script>
@@ -53,5 +78,10 @@ li {
 }
 a {
   color: #42b983;
+}
+#div1{
+  background-color: antiquewhite;
+  width: 300px;
+  height: 300px;
 }
 </style>

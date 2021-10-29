@@ -1,14 +1,36 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <nav-bar :titleArr='titleArr' id="nav"></nav-bar>
     <router-view/>
   </div>
 </template>
+ 
+<script>
 
+import NavBar from '@/components/common/NavBar'
+
+export default {
+    data () {
+    return {
+      titleArr:[
+        {title:'主页',path:'/home'},
+        {title:'收益计算',path:'/profitCompute'},
+        {title:'配对游戏',path:'/game'},
+        {title:'基金实盘',path:'/etf'},
+        {title:'常见问题',path:'/question'}
+        ]
+    }
+  },
+  components: {
+    NavBar
+  }
+}
+</script>
 <style>
+*{
+  padding: 0;
+  margin: 0;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,16 +38,8 @@
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+
+
 </style>
