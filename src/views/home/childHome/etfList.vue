@@ -19,10 +19,12 @@
 </template>
 
 <script>
+
+
 export default {
   data(){
     return {
-
+      etfdata:null
     }
   },
   props:{
@@ -32,6 +34,8 @@ export default {
         return []
       }
     }
+  },
+  created(){
   },
   methods:{
     GetUrl(url)

@@ -5,6 +5,7 @@ import Game from '@/views/Game.vue'
 import Question from '@/views/Question.vue'
 import Etf from '@/views/Etf.vue'
 import ProfitCompute from '@/views/ProfitCompute.vue'
+import test from '@/views/test'
 
 Vue.use(Router)
 

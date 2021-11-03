@@ -13,19 +13,26 @@ export function etfChart(optionData){
                     left: 'center'
                   },
               legend: {
-                  bottom:300
+                  left:30,
+                  top:100,
+                  padding: 10,
+                  orient :'vertical',
+                  textStyle:{
+                    fontSize : 16
+                  } 
               },
               tooltip: {
                 trigger: 'item',
-                formatter: "{b} : {c} ({d}%)"
+                formatter: "{b} : {c} ({d}%)",
+                extraCssText:"fontSize: px"
               },
               series: [
                 {
                   type: 'pie',
                   data: optionData,
                   id: 'pie',
-                  radius: '30%',
-                  center: ['50%', '25%'],
+                  radius: '65%',
+                  center: ['50%', '55%'],
                   emphasis: {
                     focus: 'self'
                   },

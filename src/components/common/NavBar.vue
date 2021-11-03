@@ -36,17 +36,17 @@ export default {
 <style>
 .titleArr{
   display: flex;
-  height: 50px;
-  line-height: 50px;
+  height: 64px;
+  line-height: 64px;
   background-color: black;
 }
 .titleItem{
-  flex:1
+  flex:1;
+  text-align: center;
 }
 .titleItem a{
   color: white;
   cursor: pointer;
-  font-size: 12px;
 }
 .titleItem a:hover{
   color: orange;

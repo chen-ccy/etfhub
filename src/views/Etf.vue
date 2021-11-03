@@ -1,7 +1,51 @@
 <template>
   <div class="etf">
+  
     <div class="etf-chart">
       <div class="chart-head">
+
+          <div class="etf-table">
+              <el-table
+                :data="optionData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                size="mini" border
+                >
+                <el-table-column
+                  label="基金名称"
+                  prop="name"
+                  align="center"
+                  width="300">
+                    <template scope="scope">
+                        <el-input size="mini" v-model="scope.row.name" width="50" class="etf-name"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                  label="基金金额"
+                  prop="value"
+                  align="center"
+                  width="300">
+                    <template scope="scope">
+                        <el-input size="mini" v-model="scope.row.value" width="50"  class="etf-value"></el-input>
+                    </template>                  
+                </el-table-column>
+                <el-table-column
+                  align="right"
+                  width="200">
+                  <template slot="header" slot-scope="scope">
+                    <el-input
+                      v-model="search"
+                      placeholder="输入关键字搜索"
+                      />
+                  </template>
+                  <template slot-scope="scope">
+                    <el-button
+                      @click="handleEdit(scope.$index, scope.row)">11111</el-button>
+                    <el-button
+                      type="danger"
+                      @click="handleDelete(scope.$index, scope.row)">dsgdsgh</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+          </div>
 
           <div class="etf-input">
               
@@ -9,7 +53,6 @@
               type="text"
               placeholder="请输入基金名称"
               v-model="etfName"
-              maxlength="10"
               show-word-limit
               @keyup.enter.native="etfModfiy"></el-input>
               <el-input
@@ -23,65 +66,25 @@
 
                   
           </div>
-
-          <div class="etf-table">
-              <el-table
-                :data="optionData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-                style="60%">
-                <el-table-column
-                  label="基金名称"
-                  prop="name"
-                  align="center">
-                    <template scope="scope">
-                        <el-input size="mini" v-model="scope.row.name" class="etf-name"></el-input>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                  label="基金金额"
-                  prop="value"
-                  align="center">
-                    <template scope="scope">
-                        <el-input size="mini" v-model="scope.row.value"  class="etf-value"></el-input>
-                    </template>                  
-                </el-table-column>
-                <el-table-column
-                  align="right">
-                  <template slot="header" slot-scope="scope">
-                    <el-input
-                      v-model="search"
-                      size="mini"
-                      placeholder="输入关键字搜索"/>
-                  </template>
-                  <template slot-scope="scope">
-                    <el-button
-                      size="mini"
-                      @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                    <el-button
-                      size="mini"
-                      type="danger"
-                      @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-          </div>
-
       </div>
     
       <div class="chart">
 
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import {etfChart} from '@/common/etfChart.js'
+import {getEtfData} from '@/network/request'
 
 export default {
   name: 'etf',
   data(){
-      return{
+      return {
           optionData:[
             {name:'蓝筹',value: 56.5},
             {name:'农银', value: 51.1},
@@ -90,12 +93,17 @@ export default {
           etfName:'',
           etfValue: '',
           input1:'',
-          search: ''
+          search: '',
+          etfdata: ''
           // charDom: charDom,
           //etfChart: etfChart
       }
   },
   created(){
+    getEtfData().then(res=>{
+      this.etfdata=res.data
+      console.log(res);
+  })
   },
   mounted(){
      etfChart(this.optionData)
@@ -134,54 +142,97 @@ export default {
 }
 </script>
 
-<style scoped>
- *{
-      padding: 0;
-      margin: 0;
-  }
 
+<style scoped lang="less">
+  @borderColor : #C0C4CC;
       /* background-color:#F2F6FC ; */
-  .etf{
-    width: 1200px;
+   .etf{
+    margin: 0px auto;
+    width: 100%;
+    height: 1000px;
+    background-color: #F2F6FC;
+    padding-top: 50px;
   }
   .etf-chart{
-
-    height: 800px;
-    background-color: #F2F6FC;
-    border: 1px solid;
+    margin-top: 50px;
   }
   .chart-head{
+    display: flex;
     width: 1200px;
-    /* display: flex;
-    justify-items: center; */
-  }
-  .etf-table{
-    width: 60%;
-    padding: 10px;
-    margin: 0 auto;
-  }
-  .etf-input{
-      width: 800px;
-      height: 50px;
-      margin: 0 auto;
-  }
-  .el-table .etf-name{
-    width: 200px;
-  }
-  .el-table .etf-value{
-    width: 100px;
-  }
-  .etf-input .el-input{
-      width: 200px;   
-      margin: 10px;        
-  }
-  .etf-input .el-button{
 
+    .etf-input {   
+      flex: 2;
+      margin-left: 50px;
+      text-align: center;
+      border: 1px solid @borderColor;
+      padding: 30px;
+      /deep/ input[type=text]{
+        width: 250px;
+        height: 40px;   
+        margin: 0px 0px 30px 0px;           
+      }
+      .el-button{
+        width: 250px;
+      } 
+    }
+  }
+
+
+  /deep/ input[type=text]{
+    background-color: white;
   }
   .chart{
-      width: 100%;
-      height: 700px;
-      border: 1px solid;
+      width: 1000px;
+      height: 600px;
+      margin: 50px auto;
+      border: 1px solid #eee;
+      font-size: 16px;
   }
+  .el-table{
+    margin-left: 250px;
+    flex: 4;
+    text-align: center;
+    font-size: 16px;
+    padding: 0;
+    width: 810px;
+   /deep/ table{
+      margin: 0px;
+    }
+  /deep/ .el-table__row{
+    height: 30px !important;
+  }
+  /deep/ .el-table__cell{
+    width: 200px;
+  }
+    
+  /deep/ td{
+    padding: 0 !important;
+    height: 50px ;
+    width: 100px ;
+    
+  }
+  /deep/ input[type=text]{
+    width: 150px ;
+    margin: 0;
+    background-color: white;
+    border: none;
+    font-size: 16px
+  }
+/deep/ .el-table__header{
+  // padding: 0px !important;
+} 
+  .el-button{
+    width: 50px;
+    color: blue
+  }
+  // .etf-name{
+  //   width: 50px;
+  // }
+  // .etf-value{
+  //   width: 50px;
+  // } 
+
+}
+
 
 </style>

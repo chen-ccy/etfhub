@@ -1,4 +1,4 @@
-# test
+# etfhub
 
 ## Project setup
 ```
